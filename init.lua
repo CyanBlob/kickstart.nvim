@@ -1,3 +1,5 @@
+vim.g.vimspector_enable_mappings = 'HUMAN'
+
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 local is_bootstrap = false
@@ -8,23 +10,25 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function(use)
-  -- Package manager
-  use 'wbthomason/packer.nvim'
+    -- Package manager
+    use 'wbthomason/packer.nvim'
+  
+    use { -- LSP Configuration & Plugins
+      'neovim/nvim-lspconfig',
+      requires = {
+        -- Automatically install LSPs to stdpath for neovim
+        'williamboman/mason.nvim',
+        'williamboman/mason-lspconfig.nvim',
+  
+        -- Useful status updates for LSP
+        'j-hui/fidget.nvim',
+  
+        -- Additional lua configuration, makes nvim stuff amazing
+        'folke/neodev.nvim',
+      },
+    }
 
-  use { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    requires = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-
-      -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
-
-      -- Additional lua configuration, makes nvim stuff amazing
-      'folke/neodev.nvim',
-    },
-  }
+  use 'puremourning/vimspector'
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -56,9 +60,10 @@ require('packer').startup(function(use)
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
+  --use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -100,6 +105,7 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+vim.wo.rnu = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -139,6 +145,8 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+--vim.g.python3_host_prog = 'C:\Python310\python.exe'
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
