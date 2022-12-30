@@ -1,4 +1,13 @@
+
+
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.g.vimspector_enable_mappings = 'HUMAN'
+
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
 
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
@@ -28,7 +37,35 @@ require('packer').startup(function(use)
       },
     }
 
+    use {
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+          'nvim-tree/nvim-web-devicons', -- optional, for file icons
+        },
+        tag = 'nightly' -- optional, updated every week. (see issue #1193)
+      }
+
+ -- OR setup with some options
+require("nvim-tree").setup({
+    sort_by = "case_sensitive",
+    view = {
+      adaptive_size = true,
+      mappings = {
+        list = {
+          { key = "u", action = "dir_up" },
+        },
+      },
+    },
+    renderer = {
+      group_empty = true,
+    },
+    filters = {
+      dotfiles = true,
+    },
+  })
+
   use 'puremourning/vimspector'
+  use 'scrooloose/nerdtree'
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -226,9 +263,11 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 vim.keymap.set('n', '<leader>c', "<Cmd>VimspectorReset<CR>", { desc = 'Close Vimspector' })
-vim.keymap.set('n', '<leader>b', "<Cmd>!cargo build<CR>", { desc = 'Close Vimspector' })
+vim.keymap.set('n', '<leader>b', "<Cmd>VimspectorReset<CR>|<Cmd>!cargo build<CR>", { desc = 'Close Vimspector' })
 
 vim.keymap.set('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', { noremap=true, silent=true })
+
+vim.keymap.set('n', '<leader>n', '<cmd>NvimTreeToggle<CR>', { noremap=true, silent=true })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
