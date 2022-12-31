@@ -19,34 +19,35 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function(use)
-    -- Package manager
-    use 'wbthomason/packer.nvim'
-  
-    use { -- LSP Configuration & Plugins
-      'neovim/nvim-lspconfig',
-      requires = {
-        -- Automatically install LSPs to stdpath for neovim
-        'williamboman/mason.nvim',
-        'williamboman/mason-lspconfig.nvim',
-  
-        -- Useful status updates for LSP
-        'j-hui/fidget.nvim',
-  
-        -- Additional lua configuration, makes nvim stuff amazing
-        'folke/neodev.nvim',
-      },
-    }
+  -- Package manager
+  use 'wbthomason/packer.nvim'
+  use 'rust-lang/rust.vim'
 
-    use {
-        'nvim-tree/nvim-tree.lua',
-        requires = {
-          'nvim-tree/nvim-web-devicons', -- optional, for file icons
-        },
-        tag = 'nightly' -- optional, updated every week. (see issue #1193)
-      }
+  use { -- LSP Configuration & Plugins
+    'neovim/nvim-lspconfig',
+    requires = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
 
- -- OR setup with some options
-require("nvim-tree").setup({
+      -- Useful status updates for LSP
+      'j-hui/fidget.nvim',
+
+      -- Additional lua configuration, makes nvim stuff amazing
+      'folke/neodev.nvim',
+    },
+  }
+
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
+
+  -- OR setup with some options
+  require("nvim-tree").setup({
     sort_by = "case_sensitive",
     view = {
       adaptive_size = true,
